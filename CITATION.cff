@@ -4,6 +4,8 @@ title: "Atlas R Libraries"
 version: 0.1.0
 date-released: "2026-05-14"
 license: GPL-2.0-or-later
+repository-code: "https://github.com/perbost/ATlasTools"
+url: "https://git.perbost.org/regis/AtlasTools"
 authors:
   - family-names: Perbost
     given-names: Regis

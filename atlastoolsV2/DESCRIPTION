@@ -11,8 +11,9 @@ Author: Regis Perbost [aut, cre]
 Maintainer: Regis Perbost <regis.perbost@gmail.com>
 Description: Library to build and analyse Atlas project: Multi-Omic data analysis.
 License: GPL (>= 2)
-URL: https://git.perbost.org/regis/AtlasTools
-BugReports: https://git.perbost.org/regis/AtlasTools/issues
+URL: https://git.perbost.org/regis/AtlasTools,
+    https://github.com/perbost/ATlasTools
+BugReports: https://github.com/perbost/ATlasTools/issues
 Depends:
     R (>= 4.1)
 Encoding: UTF-8

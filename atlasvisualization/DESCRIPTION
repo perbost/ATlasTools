@@ -12,8 +12,9 @@ Description: Visualization helpers for Atlas multi-omic analysis workflows,
     including SOM maps, model summaries, box plots, radar charts, and
     Jaccard-score plots.
 License: GPL (>= 2)
-URL: https://git.perbost.org/regis/AtlasTools
-BugReports: https://git.perbost.org/regis/AtlasTools/issues
+URL: https://git.perbost.org/regis/AtlasTools,
+    https://github.com/perbost/ATlasTools
+BugReports: https://github.com/perbost/ATlasTools/issues
 Depends:
     R (>= 4.1)
 Encoding: UTF-8

@@ -4,6 +4,7 @@ This repository is the standalone AtlasTools repository:
 
 ```text
 https://git.perbost.org/regis/AtlasTools.git
+https://github.com/perbost/ATlasTools.git
 ```
 
 It contains two R package directories at the repository root:
@@ -17,17 +18,19 @@ AtlasTools/
 
 ## Public Install Test
 
+From GitHub:
+
 ```r
-source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
+source("https://raw.githubusercontent.com/perbost/ATlasTools/main/install_atlas_libraries.R")
 install_atlas_libraries()
 ```
 
-For a GitHub mirror:
+From Forgejo:
 
 ```r
-source("https://raw.githubusercontent.com/OWNER/AtlasTools/main/install_atlas_libraries.R")
+source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
 install_atlas_libraries(
-  repo_url = "https://github.com/OWNER/AtlasTools.git"
+  repo_url = "https://git.perbost.org/regis/AtlasTools.git"
 )
 ```
 
@@ -38,6 +41,6 @@ install_atlas_libraries(
 3. Install `AtlasVisualization` before `atlastoolsv2`.
 4. Use `BiocManager::repositories()` in installation scripts because the
    packages use Bioconductor dependencies.
-5. Push `main` to Forgejo.
+5. Push `main` to Forgejo and GitHub.
 6. Create a Git tag such as `v0.1.0` once the first public version is ready.
-7. Test installation from a fresh R session using the public URL.
+7. Test installation from a fresh R session using the GitHub public URL.

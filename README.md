@@ -16,23 +16,22 @@ repositories for dependencies such as `MOFA2`, `fgsea`, `gage`, and
 
 ### Helper Function
 
-From Forgejo:
+From GitHub:
 
 ```r
-source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
+source("https://raw.githubusercontent.com/perbost/ATlasTools/main/install_atlas_libraries.R")
 install_atlas_libraries()
 
 library(AtlasVisualization)
 library(atlastoolsv2)
 ```
 
-If this repository is mirrored on GitHub, call the same helper with the GitHub
-Git URL:
+From Forgejo:
 
 ```r
-source("https://raw.githubusercontent.com/OWNER/AtlasTools/main/install_atlas_libraries.R")
+source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
 install_atlas_libraries(
-  repo_url = "https://github.com/OWNER/AtlasTools.git"
+  repo_url = "https://git.perbost.org/regis/AtlasTools.git"
 )
 
 library(AtlasVisualization)
@@ -40,6 +39,32 @@ library(atlastoolsv2)
 ```
 
 ### Direct Install Commands
+
+GitHub:
+
+```r
+install.packages(c("BiocManager", "remotes"))
+repos <- BiocManager::repositories()
+
+remotes::install_github(
+  "perbost/ATlasTools",
+  subdir = "atlasvisualization",
+  dependencies = NA,
+  upgrade = "never",
+  repos = repos
+)
+
+remotes::install_github(
+  "perbost/ATlasTools",
+  subdir = "atlastoolsV2",
+  dependencies = NA,
+  upgrade = "never",
+  repos = repos
+)
+
+library(AtlasVisualization)
+library(atlastoolsv2)
+```
 
 Forgejo:
 
@@ -58,32 +83,6 @@ remotes::install_git(
 
 remotes::install_git(
   git_url,
-  subdir = "atlastoolsV2",
-  dependencies = NA,
-  upgrade = "never",
-  repos = repos
-)
-
-library(AtlasVisualization)
-library(atlastoolsv2)
-```
-
-GitHub mirror:
-
-```r
-install.packages(c("BiocManager", "remotes"))
-repos <- BiocManager::repositories()
-
-remotes::install_github(
-  "OWNER/AtlasTools",
-  subdir = "atlasvisualization",
-  dependencies = NA,
-  upgrade = "never",
-  repos = repos
-)
-
-remotes::install_github(
-  "OWNER/AtlasTools",
   subdir = "atlastoolsV2",
   dependencies = NA,
   upgrade = "never",

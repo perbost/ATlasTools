@@ -24,14 +24,14 @@ See `../THIRD-PARTY-NOTICES.md` for direct dependency license notes.
 
 ## Installation
 
-From Forgejo:
+From GitHub:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
 
-remotes::install_git(
-  "https://git.perbost.org/regis/AtlasTools.git",
+remotes::install_github(
+  "perbost/ATlasTools",
   subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
@@ -41,14 +41,14 @@ remotes::install_git(
 library(AtlasVisualization)
 ```
 
-From a GitHub mirror:
+From Forgejo:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
 
-remotes::install_github(
-  "OWNER/AtlasTools",
+remotes::install_git(
+  "https://git.perbost.org/regis/AtlasTools.git",
   subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",

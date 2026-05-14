@@ -5,8 +5,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 Copyright (C) 2026 Regis Perbost <regis.perbost@gmail.com>
 Alternate contact: <regis@perbost.org>
 
-The original code and documentation in `Library/atlastoolsV2` and
-`Library/atlasvisualization` are free software: you can redistribute them and/or
+The original code and documentation in `atlastoolsV2` and
+`atlasvisualization` are free software: you can redistribute them and/or
 modify them under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or, at your
 option, any later version.

@@ -24,15 +24,15 @@ See `../THIRD-PARTY-NOTICES.md` for direct dependency license notes.
 
 ## Installation
 
-From GitHub:
+From Forgejo:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
 
-remotes::install_github(
-  "OWNER/REPOSITORY",
-  subdir = "Library/atlasvisualization",
+remotes::install_git(
+  "https://git.perbost.org/regis/AtlasTools.git",
+  subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
   repos = repos
@@ -41,15 +41,15 @@ remotes::install_github(
 library(AtlasVisualization)
 ```
 
-From Forgejo or Gitea:
+From a GitHub mirror:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
 
-remotes::install_git(
-  "https://forgejo.example.org/OWNER/REPOSITORY.git",
-  subdir = "Library/atlasvisualization",
+remotes::install_github(
+  "OWNER/AtlasTools",
+  subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
   repos = repos

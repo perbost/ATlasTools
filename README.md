@@ -1,49 +1,39 @@
-# Atlas R Libraries
+# AtlasTools
 
-This directory contains two R packages authored by Regis Perbost:
+This repository contains two R packages authored by Regis Perbost:
 
 - `atlastoolsV2/` contains the R package `atlastoolsv2`: Atlas multi-omic
   data analysis helpers.
 - `atlasvisualization/` contains the R package `AtlasVisualization`:
   visualization helpers used by Atlas analysis workflows.
 
-## Install From A Public Git Repository
+## Install
 
-Publish this repository publicly on GitHub, Forgejo, or another Git server.
 Public users should install `AtlasVisualization` first, then `atlastoolsv2`.
-See `PUBLISHING.md` if you are deciding whether to publish the whole parent
-repository or publish `Library/` as its own repository root.
+The helper below does that in the right order and configures Bioconductor
+repositories for dependencies such as `MOFA2`, `fgsea`, `gage`, and
+`ConsensusClusterPlus`.
 
-### One Helper Function
+### Helper Function
 
-After publishing, replace the URL below with your public repository URL:
+From Forgejo:
 
 ```r
-source("https://raw.githubusercontent.com/OWNER/REPOSITORY/main/Library/install_atlas_libraries.R")
-install_atlas_libraries("https://github.com/OWNER/REPOSITORY.git")
+source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
+install_atlas_libraries()
 
 library(AtlasVisualization)
 library(atlastoolsv2)
 ```
 
-If you publish the contents of `Library/` as the repository root, use:
+If this repository is mirrored on GitHub, call the same helper with the GitHub
+Git URL:
 
 ```r
-source("https://raw.githubusercontent.com/OWNER/REPOSITORY/main/install_atlas_libraries.R")
+source("https://raw.githubusercontent.com/OWNER/AtlasTools/main/install_atlas_libraries.R")
 install_atlas_libraries(
-  "https://github.com/OWNER/REPOSITORY.git",
-  subdir_prefix = "."
+  repo_url = "https://github.com/OWNER/AtlasTools.git"
 )
-
-library(AtlasVisualization)
-library(atlastoolsv2)
-```
-
-For Forgejo or Gitea:
-
-```r
-source("https://forgejo.example.org/OWNER/REPOSITORY/raw/branch/main/Library/install_atlas_libraries.R")
-install_atlas_libraries("https://forgejo.example.org/OWNER/REPOSITORY.git")
 
 library(AtlasVisualization)
 library(atlastoolsv2)
@@ -51,39 +41,16 @@ library(atlastoolsv2)
 
 ### Direct Install Commands
 
-GitHub:
+Forgejo:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
-
-remotes::install_github(
-  "OWNER/REPOSITORY",
-  subdir = "Library/atlasvisualization",
-  dependencies = NA,
-  upgrade = "never",
-  repos = repos
-)
-
-remotes::install_github(
-  "OWNER/REPOSITORY",
-  subdir = "Library/atlastoolsV2",
-  dependencies = NA,
-  upgrade = "never",
-  repos = repos
-)
-```
-
-Forgejo/Gitea:
-
-```r
-install.packages(c("BiocManager", "remotes"))
-repos <- BiocManager::repositories()
-git_url <- "https://forgejo.example.org/OWNER/REPOSITORY.git"
+git_url <- "https://git.perbost.org/regis/AtlasTools.git"
 
 remotes::install_git(
   git_url,
-  subdir = "Library/atlasvisualization",
+  subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
   repos = repos
@@ -91,19 +58,38 @@ remotes::install_git(
 
 remotes::install_git(
   git_url,
-  subdir = "Library/atlastoolsV2",
+  subdir = "atlastoolsV2",
+  dependencies = NA,
+  upgrade = "never",
+  repos = repos
+)
+
+library(AtlasVisualization)
+library(atlastoolsv2)
+```
+
+GitHub mirror:
+
+```r
+install.packages(c("BiocManager", "remotes"))
+repos <- BiocManager::repositories()
+
+remotes::install_github(
+  "OWNER/AtlasTools",
+  subdir = "atlasvisualization",
+  dependencies = NA,
+  upgrade = "never",
+  repos = repos
+)
+
+remotes::install_github(
+  "OWNER/AtlasTools",
+  subdir = "atlastoolsV2",
   dependencies = NA,
   upgrade = "never",
   repos = repos
 )
 ```
-
-If `Library/` itself is the repository root, use `subdir = "atlasvisualization"`
-and `subdir = "atlastoolsV2"` instead.
-
-The `BiocManager::repositories()` line is important because these packages use
-Bioconductor dependencies such as `MOFA2`, `fgsea`, `gage`, and
-`ConsensusClusterPlus`.
 
 ## License
 

@@ -26,23 +26,24 @@ See `../THIRD-PARTY-NOTICES.md` for direct dependency license notes.
 
 Install `AtlasVisualization` first because `atlastoolsv2` imports it.
 
-From GitHub:
+From Forgejo:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
+git_url <- "https://git.perbost.org/regis/AtlasTools.git"
 
-remotes::install_github(
-  "OWNER/REPOSITORY",
-  subdir = "Library/atlasvisualization",
+remotes::install_git(
+  git_url,
+  subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
   repos = repos
 )
 
-remotes::install_github(
-  "OWNER/REPOSITORY",
-  subdir = "Library/atlastoolsV2",
+remotes::install_git(
+  git_url,
+  subdir = "atlastoolsV2",
   dependencies = NA,
   upgrade = "never",
   repos = repos
@@ -51,24 +52,23 @@ remotes::install_github(
 library(atlastoolsv2)
 ```
 
-From Forgejo or Gitea:
+From a GitHub mirror:
 
 ```r
 install.packages(c("BiocManager", "remotes"))
 repos <- BiocManager::repositories()
-git_url <- "https://forgejo.example.org/OWNER/REPOSITORY.git"
 
-remotes::install_git(
-  git_url,
-  subdir = "Library/atlasvisualization",
+remotes::install_github(
+  "OWNER/AtlasTools",
+  subdir = "atlasvisualization",
   dependencies = NA,
   upgrade = "never",
   repos = repos
 )
 
-remotes::install_git(
-  git_url,
-  subdir = "Library/atlastoolsV2",
+remotes::install_github(
+  "OWNER/AtlasTools",
+  subdir = "atlastoolsV2",
   dependencies = NA,
   upgrade = "never",
   repos = repos

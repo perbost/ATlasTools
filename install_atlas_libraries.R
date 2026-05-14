@@ -1,22 +1,18 @@
-# Install Atlas R libraries from a public Git repository.
+# Install Atlas R libraries from the public AtlasTools Git repository.
 #
 # Example:
-# source("https://raw.githubusercontent.com/OWNER/REPOSITORY/main/Library/install_atlas_libraries.R")
-# install_atlas_libraries("https://github.com/OWNER/REPOSITORY.git")
-#
-# Forgejo/Gitea example:
-# source("https://forgejo.example.org/OWNER/REPOSITORY/raw/branch/main/Library/install_atlas_libraries.R")
-# install_atlas_libraries("https://forgejo.example.org/OWNER/REPOSITORY.git")
+# source("https://git.perbost.org/regis/AtlasTools/raw/branch/main/install_atlas_libraries.R")
+# install_atlas_libraries()
 
-install_atlas_libraries <- function(repo_url,
+install_atlas_libraries <- function(repo_url = "https://git.perbost.org/regis/AtlasTools.git",
                                     ref = "HEAD",
-                                    subdir_prefix = "Library",
+                                    subdir_prefix = ".",
                                     dependencies = NA,
                                     upgrade = "never",
                                     force = FALSE,
                                     quiet = FALSE) {
   if (!is.character(repo_url) || length(repo_url) != 1 || !nzchar(repo_url)) {
-    stop("`repo_url` must be one public Git URL, for example 'https://github.com/OWNER/REPOSITORY.git'.")
+    stop("`repo_url` must be one public Git URL, for example 'https://git.perbost.org/regis/AtlasTools.git'.")
   }
 
   repos <- getOption("repos")

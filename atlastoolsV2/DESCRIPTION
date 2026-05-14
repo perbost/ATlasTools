@@ -1,0 +1,49 @@
+Type: Package
+Package: atlastoolsv2
+Title: Atlas Multi-Omic data analysis
+Version: 0.1.0
+Date: 2023-02-15
+Authors@R:
+    person("Regis", "Perbost",
+           email = "regis.perbost@gmail.com",
+           role = c("aut", "cre"))
+Author: Regis Perbost [aut, cre]
+Maintainer: Regis Perbost <regis.perbost@gmail.com>
+Description: Library to build and analyse Atlas project: Multi-Omic data analysis.
+License: GPL (>= 2)
+Depends:
+    R (>= 4.1)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: 
+    coin,
+    combinat,
+    kohonen,
+    parallel,
+    pheatmap,
+    prabclus,
+    RColorBrewer,
+    readr,
+    tidyr,
+    MOFA2,
+    AtlasVisualization,
+    ggplot2,
+    fgsea,
+    gage,
+    tibble,
+    dplyr,
+    reshape2,
+    data.table,
+    stats,
+    mclust,
+    factoextra,
+    ConsensusClusterPlus,
+    MASS,
+    testthat,
+    glue,
+    scales,
+    stringr,
+    glmnet,
+    purrr,
+    utils

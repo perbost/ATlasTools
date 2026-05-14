@@ -1,0 +1,10 @@
+citHeader("To cite AtlasVisualization, please use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "AtlasVisualization: Visualization Helpers for Atlas Multi-Omic Workflows",
+  author = person("Regis", "Perbost"),
+  year = "2026",
+  note = "R package version 0.1.0",
+  textVersion = "Regis Perbost (2026). AtlasVisualization: Visualization Helpers for Atlas Multi-Omic Workflows. R package version 0.1.0."
+)

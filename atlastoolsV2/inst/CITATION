@@ -1,0 +1,10 @@
+citHeader("To cite atlastoolsv2, please use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "atlastoolsv2: Atlas Multi-Omic Data Analysis",
+  author = person("Regis", "Perbost"),
+  year = "2026",
+  note = "R package version 0.1.0",
+  textVersion = "Regis Perbost (2026). atlastoolsv2: Atlas Multi-Omic Data Analysis. R package version 0.1.0."
+)

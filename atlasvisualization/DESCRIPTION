@@ -1,0 +1,27 @@
+Type: Package
+Package: AtlasVisualization
+Title: Atlas Multi-Omic Visualization
+Version: 0.1.0
+Authors@R:
+    person("Regis", "Perbost",
+           email = "regis.perbost@gmail.com",
+           role = c("aut", "cre"))
+Author: Regis Perbost [aut, cre]
+Maintainer: Regis Perbost <regis.perbost@gmail.com>
+Description: Visualization helpers for Atlas multi-omic analysis workflows,
+    including SOM maps, model summaries, box plots, radar charts, and
+    Jaccard-score plots.
+License: GPL (>= 2)
+Depends:
+    R (>= 4.1)
+Encoding: UTF-8
+RoxygenNote: 7.2.3
+Imports:
+    kohonen (>= 3.0.11),
+    rlang (>= 1.1.0),
+    ggplot2,
+    gtable,
+    MOFA2,
+    ggpubr,
+    fmsb,
+    scales

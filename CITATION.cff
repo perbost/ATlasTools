@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use atlastoolsv2 or AtlasVisualization, cite the relevant library and Regis Perbost."
+title: "Atlas R Libraries"
+version: 0.1.0
+date-released: "2026-05-14"
+license: GPL-2.0-or-later
+authors:
+  - family-names: Perbost
+    given-names: Regis
+    email: regis.perbost@gmail.com
+contact:
+  - family-names: Perbost
+    given-names: Regis
+    email: regis@perbost.org
+keywords:
+  - R
+  - multi-omics
+  - self-organizing maps
+  - MOFA

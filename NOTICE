@@ -1,0 +1,23 @@
+Atlas R Libraries
+Copyright (C) 2026 Regis Perbost <regis.perbost@gmail.com>
+Alternate contact: <regis@perbost.org>
+
+The local libraries in this directory are:
+
+- atlastoolsv2
+- AtlasVisualization
+
+These libraries are authored by Regis Perbost and licensed under the GNU
+General Public License, version 2 or later.
+
+Redistribution notice:
+When copying, modifying, or redistributing these libraries, preserve this notice,
+the copyright notice, the package names, and the license notice.
+
+Requested citation:
+When using these libraries in an analysis, report, publication, service, or
+derived package, cite or acknowledge the relevant library name and Regis
+Perbost as author.
+
+Third-party dependencies are listed in THIRD-PARTY-NOTICES.md and retain their
+own upstream licenses.

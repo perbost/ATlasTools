@@ -1,1 +1,2 @@
 exportPattern("^[[:alpha:]]+")
+export(correlation_factor_clinical)

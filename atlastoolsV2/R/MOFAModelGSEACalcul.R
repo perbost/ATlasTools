@@ -9,7 +9,8 @@
 #' @return output
 
 
-MOFAModelGSEACalcul <- function(gene_list, myGO, pval, name=NULL){
+MOFAModelGSEACalcul <- function(gene_list, myGO, pval, name=NULL,
+                              nperm.fgsea=10000, nperm.collapse=500){
   
   require(dplyr)
   
@@ -22,50 +23,51 @@ MOFAModelGSEACalcul <- function(gene_list, myGO, pval, name=NULL){
     warning("Gene list not sorted")
     gene_list = sort(gene_list, decreasing = TRUE)
   }
-  
-  fgRes <- fgsea::fgsea(pathways = myGO, 
-                        stats = gene_list,
-                        minSize=15,
-                        maxSize=600,
-                        nperm=10000) %>% 
-    as.data.frame() %>% 
+
+  fgRes_all <- fgsea::fgsea(pathways = myGO,
+                            stats = gene_list,
+                            minSize=15,
+                            maxSize=600,
+                            nperm=nperm.fgsea) %>%
+    as.data.frame()
+
+  fgRes <- fgRes_all %>%
     dplyr::filter(padj < !!pval)
-  #print(dim(fgRes))
   
-  ## Filter FGSEA by using gage results. Must be significant and in same 
-  # direction to keep 
+  ## Filter FGSEA by using gage results. Must be significant and in same
+  # direction to keep
   gaRes = gage::gage(gene_list, gsets=myGO, same.dir=TRUE, set.size =c(15,600))
   
-  ups = as.data.frame(gaRes$greater) %>% 
-    tibble::rownames_to_column("Pathway") %>% 
+  ups = as.data.frame(gaRes$greater) %>%
+    tibble::rownames_to_column("Pathway") %>%
     dplyr::filter(!is.na(p.geomean) & q.val < pval ) %>%
     dplyr::select("Pathway")
   
-  downs = as.data.frame(gaRes$less) %>% 
-    tibble::rownames_to_column("Pathway") %>% 
+  downs = as.data.frame(gaRes$less) %>%
+    tibble::rownames_to_column("Pathway") %>%
     dplyr::filter(!is.na(p.geomean) & q.val < pval ) %>%
     dplyr::select("Pathway")
   
-  #print(dim(rbind(ups,downs)))
   keepups = fgRes[fgRes$NES > 0 & !is.na(match(fgRes$pathway, ups$Pathway)), ]
-  keepdowns = 
+  keepdowns =
     fgRes[fgRes$NES < 0 & !is.na(match(fgRes$pathway, downs$Pathway)), ]
   
   ### Collapse redundant pathways
   Up = MOFAModelCollapsePathway(keepups,
-                                              pathways = myGO, 
-                                              stats = gene_list, 
-                                              nperm = 500,
+                                              pathways = myGO,
+                                              stats = gene_list,
+                                              nperm = nperm.collapse,
                                               pval.threshold = 0.05)
   Down = MOFAModelCollapsePathway(keepdowns,
-                                                myGO, 
-                                                gene_list, 
-                                                nperm = 500,
-                                                pval.threshold = 0.05) 
+                                                myGO,
+                                                gene_list,
+                                                nperm = nperm.collapse,
+                                                pval.threshold = 0.05)
   
-  fgRes = fgRes[ !is.na(match(fgRes$pathway, 
-                              c( Up$mainPathways, Down$mainPathways))), ] %>% 
+  fgRes = fgRes[ !is.na(match(fgRes$pathway,
+                              c( Up$mainPathways, Down$mainPathways))), ] %>%
     arrange(desc(NES))
+  fgRes$pathway_id = fgRes$pathway
   fgRes$pathway = stringr::str_replace(fgRes$pathway, "GO_" , "")
   
   fgRes$Enrichment = ifelse(fgRes$NES > 0, "Positive", "Negative")
@@ -80,9 +82,14 @@ MOFAModelGSEACalcul <- function(gene_list, myGO, pval, name=NULL){
                                  "Negative" = "firebrick") ) +
     ggplot2::coord_flip() +
     ggplot2::labs(x="Pathway", y="Normalized Enrichment Score",
-         title=sprintf("GSEA - %s",name)) + 
+         title=sprintf("GSEA - %s",name)) +
     ggplot2::theme_bw()
-  
-  output = list("Results" = fgRes, "Plot" = g)
+
+  output = list("Results" = fgRes,
+                "Plot" = g,
+                "fgsea_all" = fgRes_all,
+                "gene_stats" = data.frame(gene=names(gene_list), stat=as.numeric(gene_list), stringsAsFactors=FALSE),
+                "gage_greater" = as.data.frame(gaRes$greater),
+                "gage_less" = as.data.frame(gaRes$less))
   return(output)
 }

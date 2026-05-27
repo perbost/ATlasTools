@@ -41,15 +41,15 @@ MOFAModelExtraAlnalysis <- function(list.factor, path.model,
     MOFA2::samples_names(MofaObject) <- newnames
     MOFA2::groups_names(MofaObject) <- "single_group"
     
-    MofaModelAnalysis(MofaObject, 
+    .ModelAnalysisPlot(MofaObject, 
                                           path.save=path.analyse, 
-                                          plot.facotr_grid=T,
+                                          plot.factor_grid=T,
                                           file.name=
                                             "factors_grid.pdf",
                                           width=14,
                                           height=14)
     
-    MofaModelAnalysis(path.save=path.analyse, 
+    .ModelAnalysisPlot(path.save=path.analyse, 
                                           plot.models_comparaison_factors=T,
                                           file.name=
                                         "comparaison_factors_phase1_phase2.pdf",
@@ -68,7 +68,7 @@ MOFAModelExtraAlnalysis <- function(list.factor, path.model,
   model.names <- c(model.names, "Phase1","Phase2")
   names(tot_models) <- model.names
   
-  MofaModelAnalysis(path.save=path.model, 
+  .ModelAnalysisPlot(path.save=path.model, 
                                         plot.models_comparaison_factors=T,
                                         file.name=
                                       "comparaison_factors_phase1_phase2.pdf",

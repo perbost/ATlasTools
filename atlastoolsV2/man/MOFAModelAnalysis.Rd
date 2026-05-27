@@ -10,7 +10,11 @@ MOFAModelAnalysis(
   Clinical = NA,
   perform.GSEA = F,
   not.denoise = NULL,
-  list.view.GSEA = NULL
+  show_colnames = T,
+  fast.mode = TRUE,
+  gsea.nperm = 10000,
+  gsea.collapse.nperm = 500,
+  max.enrichment.plots = Inf
 )
 }
 \arguments{
@@ -24,8 +28,7 @@ MOFAModelAnalysis(
 
 \item{not.denoise}{(list) list of view that should not be denoised.}
 
-\item{list.view.GSEA}{(list) we generate GSEA outputs only for feature in
-this list.}
+\item{show_colnames}{(bool) if TRUE show sample names on heatmaps.}
 }
 \description{
 We explore different measure of model capacity to understand

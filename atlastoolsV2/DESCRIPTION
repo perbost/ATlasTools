@@ -49,4 +49,6 @@ Imports:
     stringr,
     glmnet,
     purrr,
-    utils
+    utils,
+    curl,
+    jsonlite

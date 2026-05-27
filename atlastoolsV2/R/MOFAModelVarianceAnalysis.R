@@ -11,14 +11,14 @@ MOFAModelVarianceAnalysis <- function(path.model, results=NULL){
   if(is.null(results)) 
     results <- MOFAModelExtractR2(path.model)
   
-  MofaModelAnalysis(path.save=path.model, 
+  .ModelAnalysisPlot(path.save=path.model, 
                                         plot.VarianceByFactor=T,
                                         file.name=
                                           "Variance_additionnal_byfactors.pdf",
                                         result=results,
                                         additional.variance=T)
   
-  MofaModelAnalysis(path.save=path.model, 
+  .ModelAnalysisPlot(path.save=path.model, 
                                         plot.VarianceByFactor=T,
                                         file.name=
                                       "Variance_additionnal_byfactors_loss.pdf",

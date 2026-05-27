@@ -31,6 +31,7 @@
 #' and object and directories in existing folder. If False, we copy all 
 #' existing files, objects and directory in folder called "old_model".
 #' @param not.denoise (list) list of view that should not be denoised.
+#' @param show_colnames (bool) if TRUE show sample names on heatmaps.
 #' @export
 
 
@@ -40,7 +41,8 @@ MOFAMultiTraining <- function(nb.factor, data,
                               keep.group=NULL, max.iteration=15000, 
                               MOFA.nb.seed=20, scale.view=F, scale.group=F, 
                               Clear.models_results.existing=F,
-                              not.denoise=NULL){
+                              not.denoise=NULL,
+                              show_colnames=T){
   
   path.model.factor <- file.path(path.model, sprintf("Multi_%03d", nb.factor))
   MOFAModelsFolderManager(path.model,
@@ -73,7 +75,8 @@ MOFAMultiTraining <- function(nb.factor, data,
   MOFAModelFactorsAnalysis(file.path(path.model.factor, 
                                                    "model.hdf5"),
                                          path.model.factor,
-                                         keep.group=keep.group)
+                                         keep.group=keep.group,
+                                         show_colnames=show_colnames)
   
   dir.create(file.path(path.model.factor, "Analysis"))
   
@@ -81,8 +84,7 @@ MOFAMultiTraining <- function(nb.factor, data,
                                   file.path(path.model.factor), 
                                   perform.GSEA=T,
                                   not.denoise=not.denoise,
-                                  list.view.GSEA=
-                  c("RNAseq","NS_IO360","NN_IO","NN_core","NS_IO","NS_core"))
+                                  show_colnames=show_colnames)
   
   # export Z matrix from MOFA model:
   MOFAModelZmatrixExport(model, path.model.factor)

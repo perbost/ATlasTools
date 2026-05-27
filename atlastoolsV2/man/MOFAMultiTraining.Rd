@@ -16,7 +16,8 @@ MOFAMultiTraining(
   scale.view = F,
   scale.group = F,
   Clear.models_results.existing = F,
-  not.denoise = NULL
+  not.denoise = NULL,
+  show_colnames = T
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ and object and directories in existing folder. If False, we copy all
 existing files, objects and directory in folder called "old_model".}
 
 \item{not.denoise}{(list) list of view that should not be denoised.}
+
+\item{show_colnames}{(bool) if TRUE show sample names on heatmaps.}
 }
 \description{
 We use different initialization seed to train the best MOFA 

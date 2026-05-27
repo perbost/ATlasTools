@@ -49,7 +49,7 @@ MOFAModelExtractR2 <- function(path.model){
     }
   }
   
-  MofaModelAnalysis(path.save=path.model, 
+  .ModelAnalysisPlot(path.save=path.model, 
                                         plot.VarianceByFactor=T,
                                         file.name="Variance_by_factors.pdf",
                                         result=result)

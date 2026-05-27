@@ -4,7 +4,12 @@
 \alias{MOFAModelFactorsAnalysis}
 \title{Explore top factor correlated to features and plot figures.}
 \usage{
-MOFAModelFactorsAnalysis(path.model, path.model.factor, keep.group = NULL)
+MOFAModelFactorsAnalysis(
+  path.model,
+  path.model.factor,
+  keep.group = NULL,
+  show_colnames = T
+)
 }
 \arguments{
 \item{path.model}{path to the trained model to load}
@@ -12,6 +17,8 @@ MOFAModelFactorsAnalysis(path.model, path.model.factor, keep.group = NULL)
 \item{path.model.factor}{path to the factor folder of the current model}
 
 \item{keep.group}{(bool) If we want keep only samples of specific group}
+
+\item{show_colnames}{(bool) If TRUE show sample names on heatmaps}
 }
 \description{
 We compute top features correlated to the different factors.

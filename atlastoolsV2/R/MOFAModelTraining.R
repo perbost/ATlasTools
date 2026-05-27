@@ -38,7 +38,7 @@ MOFAModelTraining <- function(data, path, drop.factor=0.001,
   }
   Sys.sleep(5) # waiting time to give the system time to create the MOFA object.
   
-  MofaModelAnalysis(MofaObject=MOFAobject, 
+  .ModelAnalysisPlot(MofaObject=MOFAobject, 
                                         path.save=path, 
                                         plot.data.overview=T,
                                         file.name="Data_overview.pdf")

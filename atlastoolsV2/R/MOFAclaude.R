@@ -1,12 +1,15 @@
-#' @title Annotate MOFA factors with OpenAI ChatGPT
-#' @name MOFAchatGPT
+#' @title Annotate MOFA factors with Anthropic Claude
+#' @name MOFACLAUDE
 #' @description Build per-factor summaries from MOFA weights and request
-#' expert biological interpretations from an OpenAI chat model.
+#' expert biological interpretations from an Anthropic Claude model.
 #' @param model (MOFA) Trained MOFA model.
 #' @param path.result (str) Output directory where annotation files are saved.
-#' @param openai_model (str) OpenAI model name. Default is "gpt-4o".
-#' @param openai_api_key (str) OpenAI API key. Default is Sys.getenv("OPENAI_API_KEY").
-#' @param openai_base_url (str) OpenAI base URL.
+#' @param anthropic_model (str) Anthropic Claude model name. Default is
+#' "claude-3-5-sonnet-20241022".
+#' @param anthropic_api_key (str) Anthropic API key. Default is
+#' Sys.getenv("ANTHROPIC_API_KEY").
+#' @param anthropic_base_url (str) Anthropic base URL.
+#' @param anthropic_version (str) Anthropic API version header.
 #' @param llm_prompt (str) Base prompt prepended before each factor JSON.
 #' @param nfeatures (int) Number of top positive and negative features per view.
 #' @param file.name (str) Log filename storing prompts and responses.
@@ -17,12 +20,13 @@
 #' @param max_tokens (int) Maximum number of output tokens.
 #' @export
 #' @return A named list with one LLM response per factor.
-MOFAchatGPT <- function(
+MOFACLAUDE <- function(
     model,
     path.result,
-    openai_model="gpt-4o",
-    openai_api_key=Sys.getenv("OPENAI_API_KEY"),
-    openai_base_url="https://api.openai.com/v1",
+    anthropic_model="claude-3-5-sonnet-20241022",
+    anthropic_api_key=Sys.getenv("ANTHROPIC_API_KEY"),
+    anthropic_base_url="https://api.anthropic.com/v1",
+    anthropic_version="2023-06-01",
     llm_prompt=paste(
       "You are a senior immunologist and bioinformatician.",
       "Task:",
@@ -47,8 +51,8 @@ MOFAchatGPT <- function(
 ){
   if(!dir.exists(path.result)) dir.create(path.result, recursive=TRUE)
 
-  if(!nzchar(openai_api_key)) {
-    stop("Missing OpenAI API key. Set OPENAI_API_KEY or pass openai_api_key.")
+  if(!nzchar(anthropic_api_key)) {
+    stop("Missing Anthropic API key. Set ANTHROPIC_API_KEY or pass anthropic_api_key.")
   }
 
   K <- MOFA2::get_dimensions(model)$K
@@ -64,7 +68,7 @@ MOFAchatGPT <- function(
       if(nrow(W) == 0) next
 
       if(grepl("RNA", view, ignore.case=TRUE)){
-        W$gene <- sub("_[^_]+$", "", as.character(W$feature))
+        W$gene <- read.table(text=as.character(W$feature), sep="_")$V1
         W$feature_label <- W$gene
       } else {
         W$feature_label <- as.character(W$feature)
@@ -86,15 +90,20 @@ MOFAchatGPT <- function(
     summary_text[[factor]] <- factor_summary
   }
 
-  call_openai <- function(prompt_txt){
-    url <- paste0(sub("/+$", "", openai_base_url), "/chat/completions")
+  call_claude <- function(prompt_txt){
+    url <- paste0(sub("/+$", "", anthropic_base_url), "/messages")
 
     payload <- list(
-      model=openai_model,
+      model=anthropic_model,
       temperature=temperature,
       max_tokens=as.integer(max_tokens),
       messages=list(
-        list(role="user", content=prompt_txt)
+        list(
+          role="user",
+          content=list(
+            list(type="text", text=prompt_txt)
+          )
+        )
       )
     )
 
@@ -109,7 +118,8 @@ MOFAchatGPT <- function(
     curl::handle_setheaders(
       handle,
       "Content-Type"="application/json",
-      "Authorization"=paste("Bearer", openai_api_key)
+      "x-api-key"=anthropic_api_key,
+      "anthropic-version"=anthropic_version
     )
 
     res <- curl::curl_fetch_memory(url, handle=handle)
@@ -122,13 +132,25 @@ MOFAchatGPT <- function(
       stop(msg, call.=FALSE)
     }
 
-    if(is.null(obj$choices) || length(obj$choices) == 0) {
-      stop("OpenAI returned no choices.", call.=FALSE)
+    if(is.null(obj$content) || length(obj$content) == 0) {
+      stop("Anthropic returned no content.", call.=FALSE)
     }
 
-    out <- obj$choices[[1]]$message$content
-    if(is.null(out)) out <- ""
-    paste(as.character(out), collapse="")
+    text_blocks <- vapply(
+      obj$content,
+      function(block){
+        if(is.list(block) && identical(block$type, "text") && !is.null(block$text)) {
+          paste(as.character(block$text), collapse="")
+        } else {
+          ""
+        }
+      },
+      character(1)
+    )
+
+    out <- paste(text_blocks[nzchar(text_blocks)], collapse="")
+    if(!nzchar(out)) stop("Anthropic returned empty text.", call.=FALSE)
+    out
   }
 
   responses <- vector("list", length=K)
@@ -139,10 +161,10 @@ MOFAchatGPT <- function(
 
   for(n in seq_len(K)){
     path_save <- file.path(path.result, sprintf("Factor_%i", n))
-    path_chatgpt <- file.path(path_save, "CHATGPT")
-    if(!dir.exists(path_chatgpt)) dir.create(path_chatgpt, recursive=TRUE)
+    path_claude <- file.path(path_save, "CLAUDE")
+    if(!dir.exists(path_claude)) dir.create(path_claude, recursive=TRUE)
 
-    out_file <- file.path(path_chatgpt, file.name)
+    out_file <- file.path(path_claude, file.name)
 
     json_txt <- jsonlite::toJSON(
       summary_text[[n]],
@@ -163,7 +185,7 @@ MOFAchatGPT <- function(
     last_error <- NULL
 
     for(attempt in seq_len(retries)){
-      ans <- tryCatch(call_openai(prompt_txt), error=function(e) e)
+      ans <- tryCatch(call_claude(prompt_txt), error=function(e) e)
 
       if(!inherits(ans, "error")){
         llm_response_txt <- paste(as.character(ans), collapse="")

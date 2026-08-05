@@ -141,7 +141,7 @@ MOFAModelAnalysis <- function(model, path.result, Clinical=NA, perform.GSEA=F,
           W$value <- W$value/max(abs(W$value))
           W$sign <- ifelse(W$value > 0, "+", "-")
           W <- W[with(W, order(-value)), ]
-          W$gene = read.table(text=as.character(W$feature),sep="_")$V1
+          W$gene <- sub("_.*$", "", as.character(W$feature))
           
           gene_list = W$value
           names(gene_list) = W$gene

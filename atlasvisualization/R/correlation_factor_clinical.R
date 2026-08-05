@@ -8,6 +8,7 @@
 #' @param adjust.method (str) P-value adjustment method passed to
 #' \\code{stats::p.adjust}.
 #' @param use.adjusted.p (bool) If TRUE, plot adjusted p-values, otherwise raw p-values.
+#' @param use.estimate.sign (bool) If TRUE, use the sign of the estimate in the plotted score. If FALSE, use unsigned \code{-log10(p)}.
 #' @param min.pvalue (float) Lower bound to avoid infinite \\code{-log10(p)}.
 #' @param bool_export_table (bool) If TRUE, export and return the result table
 #' instead of returning a plot.
@@ -22,6 +23,7 @@ correlation_factor_clinical <- function(
     factors = "all",
     adjust.method = "BH",
     use.adjusted.p = FALSE,
+    use.estimate.sign = TRUE,
     min.pvalue = 1e-6,
     p.value.thr = 0.05,
     bool_export_table = FALSE,
@@ -41,6 +43,9 @@ correlation_factor_clinical <- function(
   }
 
   factor_df <- MOFA2::get_factors(object, factors = factors, as.data.frame = TRUE)
+  factor_df <- factor_df %>%
+    dplyr::group_by(sample, factor) %>%
+    dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop")
   factor_wide <- tidyr::pivot_wider(
     factor_df,
     id_cols = "sample",
@@ -107,7 +112,10 @@ correlation_factor_clinical <- function(
   p_used[is.na(p_used)] <- 1
   p_used[p_used > p.value.thr] <- 1
   p_used <- pmax(p_used, min.pvalue)
-  res$score <- -log10(p_used) * sign(res$estimate)
+  res$score <- -log10(p_used)
+  if (isTRUE(use.estimate.sign)) {
+    res$score <- res$score * sign(res$estimate)
+  }
 
   if (isTRUE(bool_export_table)) {
     if (!dir.exists(path.save)) dir.create(path.save, recursive = TRUE)
@@ -121,15 +129,25 @@ correlation_factor_clinical <- function(
     )
     return(res)
   }
-  ggplot2::ggplot(res, ggplot2::aes(x = covariate, y = factor, fill = score)) +
-    ggplot2::geom_tile(color = "lightgrey") +
+  fill_scale <- if (isTRUE(use.estimate.sign)) {
     ggplot2::scale_fill_gradient2(
       low = "#2166ac",
       mid = "white",
       high = "#b2182b",
       midpoint = 0,
       name = ifelse(use.adjusted.p, "sign(beta) * -log10(adj p)", "sign(beta) * -log10(p)")
-    ) +
+    )
+  } else {
+    ggplot2::scale_fill_gradient(
+      low = "white",
+      high = "#b2182b",
+      name = ifelse(use.adjusted.p, "-log10(adj p)", "-log10(p)")
+    )
+  }
+
+  ggplot2::ggplot(res, ggplot2::aes(x = covariate, y = factor, fill = score)) +
+    ggplot2::geom_tile(color = "lightgrey") +
+    fill_scale +
     ggplot2::theme_minimal() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
